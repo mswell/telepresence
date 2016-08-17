@@ -93,6 +93,20 @@ cd libvpx
 ./configure --prefix=/usr/local --enable-realtime-only --enable-error-concealment --disable-examples --enable-vp8 --enable-pic --enable-shared --as=yasm
 make && make install
 ```
+fixed Bug: http://stackoverflow.com/questions/6801390/how-do-i-debug-int-max-undeclared
+
+### Building libyuv ###
+**libyuv** is optional. Adds support for video scaling and chroma conversion.
+```
+mkdir libyuv && cd libyuv
+svn co http://src.chromium.org/svn/trunk/tools/depot_tools .
+./gclient config http://libyuv.googlecode.com/svn/trunk
+./gclient sync && cd trunk
+make -j6 V=1 -r libyuv BUILDTYPE=Release
+#cp out/Release/obj.target/libyuv.a /usr/local/lib
+#mkdir /usr/local/include/libyuv && cp -r include/* /usr/local/include/libyuv
+```
+fixed Bug: make -j7 V=1 -f linux.mk
 
 ### Building opencore-amr ###
 [opencore-amr](http://sourceforge.net/projects/opencore-amr/) is optional. Adds support for AMR audio codec.
