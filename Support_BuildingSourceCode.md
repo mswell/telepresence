@@ -68,7 +68,7 @@ Or build the source by yourself:
 wget http://downloads.xiph.org/releases/speex/speex-1.2beta3.tar.gz
 tar -xvzf speex-1.2beta3.tar.gz
 cd speex-1.2beta3
-./configure --disable-oggtest --without-libogg && make && make install
+./configure --prefix=/usr/local --disable-oggtest --without-libogg && make && make install
 ```
 
 ### Building YASM ###
@@ -77,7 +77,7 @@ cd speex-1.2beta3
 wget http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz
 tar -xvzf yasm-1.2.0.tar.gz
 cd yasm-1.2.0
-./configure && make && make install
+./configure --prefix=/usr/local && make && make install
 ```
 
 ### Building libvpx ###
@@ -90,7 +90,7 @@ Or build the source by yourself:
 ```
 git clone http://git.chromium.org/webm/libvpx.git
 cd libvpx
-./configure --enable-realtime-only --enable-error-concealment --disable-examples --enable-vp8 --enable-pic --enable-shared --as=yasm
+./configure --prefix=/usr/local --enable-realtime-only --enable-error-concealment --disable-examples --enable-vp8 --enable-pic --enable-shared --as=yasm
 make && make install
 ```
 
@@ -98,7 +98,7 @@ make && make install
 [opencore-amr](http://sourceforge.net/projects/opencore-amr/) is optional. Adds support for AMR audio codec.
 ```
 git clone git://opencore-amr.git.sourceforge.net/gitroot/opencore-amr/opencore-amr
-cd opencore-amr && autoreconf --install && ./configure && make && make install
+cd opencore-amr && autoreconf --install && ./configure --prefix=/usr/local && make && make install
 ```
 
 ### Building libopus ###
@@ -107,7 +107,7 @@ cd opencore-amr && autoreconf --install && ./configure && make && make install
 wget http://downloads.xiph.org/releases/opus/opus-1.0.2.tar.gz
 tar -xvzf opus-1.0.2.tar.gz
 cd opus-1.0.2
-./configure --with-pic --enable-float-approx && make && make install
+./configure --prefix=/usr/local --with-pic --enable-float-approx && make && make install
 ```
 
 ### Building libgsm ###
@@ -128,19 +128,20 @@ cd gsm-1.0-pl13 && make && make install
 ### Building g729 ###
 [G729](http://en.wikipedia.org/wiki/G.729) is optional. Adds support for G.729 audio codec.
 ```
-svn co http://g729.googlecode.com/svn/trunk/ g729b
+https://github.com/DoubangoTelecom/g729.git
 cd g729b
-./autogen.sh && ./configure --enable-static --disable-shared && make && make install
+./autogen.sh && ./configure --prefix=/usr/local --enable-static --disable-shared && make && make install
 ```
+fixed Bug: https://github.com/DoubangoTelecom/g729/issues/3
 
 ### Building iLBC ###
 [iLBC](http://en.wikipedia.org/wiki/Internet_Low_Bitrate_Codec) is optional. Adds support for iLBC audio codec.
 ```
-svn co http://doubango.googlecode.com/svn/branches/2.0/doubango/thirdparties/scripts/ilbc
+git clone https://github.com/svn2github/ilbc.git
 cd ilbc
 wget http://www.ietf.org/rfc/rfc3951.txt
 awk -f extract.awk rfc3951.txt
-./autogen.sh && ./configure
+./autogen.sh && ./configure --prefix=/usr/local
 make && make install
 ```
 
@@ -151,7 +152,7 @@ wget ftp://ftp.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
 tar -xvjf last_x264.tar.bz2
 # the output directory may be difference depending on the version and date
 cd x264-snapshot-20121201-2245
-./configure --enable-shared --enable-pic && make && make install
+./configure --prefix=/usr/local --enable-shared --enable-pic && make && make install
 ```
 
 ### Building libfreetype ###
@@ -173,9 +174,10 @@ cd freetype-2.4.12
 ```
 wget http://downloads.sourceforge.net/faac/faac-1.28.tar.bz2
 tar -xvjf faac-1.28.tar.bz2
-cd faac-1.28 && ./configure && make && make install
+cd faac-1.28 && ./configure --prefix=/usr/local && make && make install
 ```
 _Note: building the tests could fails but you can safely ignore it._
+fixed Bug: http://blog.naver.com/xor74/40150529439
 
 ### Building FFmpeg ###
 [FFmpeg](http://www.ffmpeg.org/) is **required** even if you don’t want support for video.
@@ -188,7 +190,7 @@ cd ffmpeg
 git checkout n1.2
 
 # [3] configure source
-./configure \
+./configure  --prefix=/usr/local \
 --extra-cflags="-fPIC" \
 --extra-ldflags="-lpthread" \
 \
@@ -231,6 +233,7 @@ cd openal-soft-1.15.1/build
 cmake ..
 make && make install
 ```
+fixed Bug: cmake -DCMAKE_INSTALL_PREFIX=/usr/local . && make DESTDIR=/usr/local all install
 
 ### Building openOffice ###
 
@@ -273,21 +276,38 @@ _"MSG: [TELEPRESENCE](TELEPRESENCE.md) [FFmpegOverlay](FFmpegOverlay.md) Not val
 ### Building Doubango ###
 [Doubango VoIP framework 2.0](https://code.google.com/p/doubango/) **SVN [r989](https://code.google.com/p/telepresence/source/detail?r=989) or later is required**.
 ```
-svn checkout http://doubango.googlecode.com/svn/branches/2.0/doubango doubango
-cd doubango && ./autogen.sh && ./configure --with-speexdsp --with-ffmpeg
+git clone https://github.com/DoubangoTelecom/doubango.git
+cd doubango && ./autogen.sh
+```
+  * Minimal build
+```
+CFLAGS=-I/usr/local/include CPPFLAGS=-I/usr/local/include CXXFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure --with-ssl --with-srtp --with-speexdsp
 make && make install
 ```
+  * Recommended build
+```
+CFLAGS=-I/usr/local/include CPPFLAGS=-I/usr/local/include CXXFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure --with-ssl --with-srtp --with-speexdsp --with-ffmpeg --with-opus
+make && make install
+```
+  * Full build
+```
+CFLAGS=-I/usr/local/include CPPFLAGS=-I/usr/local/include CXXFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure --with-ssl --with-srtp --with-vpx --with-yuv --with-amr --with-speex --with-speexdsp --enable-speexresampler --enable-speexdenoiser --with-opus --with-gsm --with-ilbc --with-g729 --with-ffmpeg
+make && make install
+```
+
 Only few options are used to configure the source code and force enabling mandatory libraries. Any optional library is automatically detected. For example, use _"--with-opus"_ to force using Opus audio codec or _"--without-opus"_ to avoid automatic detection. You can also specify a path where to search for a library (e.g. _"--with-opus=/usr/local"_).
 Use _"configure --help"_ for more information on supported options.
 
 ## Building the Telepresence system ##
 
 ```
-svn checkout https://telepresence.googlecode.com/svn/trunk/ telepresence
+git clone https://github.com/DoubangoTelecom/telepresence.git
 cd telepresence
 ./autogen.sh && ./configure
 make && make install
 ```
+
+fixed Bug: cd ./doubango/bindings/_common && make clean && cp ./doubango/bindings/_common telepresence/tinywrap && cd telepresence && make && make install
 
 If no prefix is defined then, the binaries will be installed into **/usr/local/sbin**.
 
@@ -296,6 +316,21 @@ If no prefix is defined then, the binaries will be installed into **/usr/local/s
 This is only required for first-time installations and **will override any existing configuration file**.
 ```
 make samples
+```
+fixed Bug:
+```
+diff --git a/Makefile.am b/Makefile.am
+index b592f2d..33853d2 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -170,5 +170,5 @@ telepresence_LDFLAGS += -Wl,-rpath,${OPENOFFICE_ROOT}/sdk/lib:${OPENOFFICE_ROOT}
+ endif
+
+ samples:
+-       cp -f ./telepresence.cfg ${exec_prefix}/sbin
+-       cp -f --parents ./fonts/truetype/freefont/* ${exec_prefix}/sbin
++       cp -f ./telepresence.cfg ${exec_prefix}/sbin/
++       cp -f --parents ./fonts/truetype/freefont/* ${exec_prefix}/sbin/
 ```
 
 ### Testing ###
