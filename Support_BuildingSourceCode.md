@@ -351,3 +351,9 @@ index b592f2d..33853d2 100644
 We highly recommend using our [WebRTC SIP telepresence client](http://conf-call.org/) to test the system.
 
 For more information on how to test the system: click [here](Support_Testing_the_system.md)
+
+## Run ##
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+./telepresence
+```
