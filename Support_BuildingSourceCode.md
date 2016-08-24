@@ -148,7 +148,7 @@ cd gsm-1.0-pl13 && make && make install
 ### Building g729 ###
 [G729](http://en.wikipedia.org/wiki/G.729) is optional. Adds support for G.729 audio codec.
 ```
-https://github.com/DoubangoTelecom/g729.git
+git clone https://github.com/DoubangoTelecom/g729.git
 cd g729b
 ./autogen.sh && ./configure --prefix=/usr/local --enable-static --disable-shared && make && make install
 ```
