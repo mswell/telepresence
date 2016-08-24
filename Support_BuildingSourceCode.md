@@ -44,6 +44,13 @@ tar -xvzf openssl-1.0.1c.tar.gz
 cd openssl-1.0.1c
 ./config shared --prefix=/usr/local --openssldir=/usr/local/openssl && make && make install
 ```
+fixed Bug: (Mac OSX)
+```
+export KERNEL_BITS=64
+./config shared no-ssl2 no-ssl3 enable-ec_nistp_64_gcc_128 --openssldir=/usr/local/ssl/macosx-x64/
+make && make install
+```
+
 Some known issues when you have more than one openssl libraries installed is discussed at [https://groups.google.com/forum/#!topic/opentelepresence/JctxtEyW-dg](https://groups.google.com/forum/#!topic/opentelepresence/JctxtEyW-dg) (_see comment 4_).
 
 ### Building libogg, libvorbis and libtheora ###
@@ -174,6 +181,10 @@ tar -xvjf last_x264.tar.bz2
 cd x264-snapshot-20121201-2245
 ./configure --prefix=/usr/local --enable-shared --enable-pic && make && make install
 ```
+fixed Bug: (Mac OSX)
+```
+git clone http://git.videolan.org/git/x264.git
+```
 
 ### Building libfreetype ###
 [libfreetype](http://www.freetype.org/) is **required** and used for video overlays.
@@ -186,7 +197,7 @@ Or build the source by yourself:
 wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.12.tar.bz2
 tar -xvjf freetype-2.4.12.tar.bz2
 cd freetype-2.4.12
-./configure && make && make install
+./configure --prefix=/usr/local && make && make install
 ```
 
 ### Building libfaac ###
@@ -210,23 +221,18 @@ cd ffmpeg
 git checkout n1.2
 
 # [3] configure source
+CFLAGS=-I/usr/local/include CPPFLAGS=-I/usr/local/include CXXFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib \
 ./configure  --prefix=/usr/local \
 --extra-cflags="-fPIC" \
 --extra-ldflags="-lpthread" \
-\
 --enable-pic --enable-memalign-hack --enable-pthreads \
 --enable-shared --disable-static \
 --disable-network --enable-pthreads \
 --disable-ffmpeg --disable-ffplay --disable-ffserver --disable-ffprobe \
-\
 --enable-gpl \
-\
 --disable-debug \
-\
 --enable-libfreetype \
-\
 --enable-libfaac \
-\
 --enable-nonfree
 # [4] build and install
 make && make install
@@ -243,6 +249,19 @@ git checkout v1.1
 make ENABLE64BIT=Yes # Use ENABLE64BIT=No for 32bit platforms
 make install
 ```
+fixed Bug: (Mac OSX)
+```
+* Upgrade nasm :
+brew install nasm
+cd /usr/bin
+sudo mv nasm nasm.old
+sudo ln -s /usr/local/Cellar/nasm/2.11.06/bin/nasm nasm
+
+* Compile nasm :
+export PATH=$PATH:/usr/local/bin
+make && make install
+```
+
 
 ### Building OpenAL Soft ###
 [OpenAL Soft](http://kcat.strangesoft.net/openal.html) is optional. Adds support for Stereoscopic (spatial) 3D audio.
@@ -253,7 +272,10 @@ cd openal-soft-1.15.1/build
 cmake ..
 make && make install
 ```
-fixed Bug: cmake -DCMAKE_INSTALL_PREFIX=/usr/local . && make DESTDIR=/usr/local all install
+fixed Bug:
+```
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local .. && make DESTDIR=/usr/local all install
+```
 
 ### Building openOffice ###
 
