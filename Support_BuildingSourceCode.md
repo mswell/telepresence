@@ -88,7 +88,7 @@ sudo yum install libvpx-devel
 ```
 Or build the source by yourself:
 ```
-git clone http://git.chromium.org/webm/libvpx.git
+git clone https://chromium.googlesource.com/webm/libvpx
 cd libvpx
 ./configure --prefix=/usr/local --enable-realtime-only --enable-error-concealment --disable-examples --enable-vp8 --enable-pic --enable-shared --as=yasm
 make && make install
