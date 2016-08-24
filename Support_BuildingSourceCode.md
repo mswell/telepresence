@@ -106,7 +106,13 @@ make -j6 V=1 -r libyuv BUILDTYPE=Release
 #cp out/Release/obj.target/libyuv.a /usr/local/lib
 #mkdir /usr/local/include/libyuv && cp -r include/* /usr/local/include/libyuv
 ```
-fixed Bug: make -j7 V=1 -f linux.mk
+fixed Bug:
+```
+git clone https://chromium.googlesource.com/libyuv/libyuv
+make -j7 V=1 -f linux.mk
+cp ./libyuv.a /usr/local/lib
+mkdir /usr/local/include/libyuv && cp -r include/* /usr/local/include/libyuv
+```
 
 ### Building opencore-amr ###
 [opencore-amr](http://sourceforge.net/projects/opencore-amr/) is optional. Adds support for AMR audio codec.
