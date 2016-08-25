@@ -348,8 +348,12 @@ cd telepresence
 ./autogen.sh && ./configure
 make && make install
 ```
-
-fixed Bug: cd ./doubango/bindings/_common && make clean && cp ./doubango/bindings/_common telepresence/tinywrap && cd telepresence && make && make install
+fixed Bug:
+```
+cd ./doubango/bindings/_common && make clean
+cp ./doubango/bindings/_common telepresence/tinywrap
+cd telepresence && make && make install
+```
 
 If no prefix is defined then, the binaries will be installed into **/usr/local/sbin**.
 
